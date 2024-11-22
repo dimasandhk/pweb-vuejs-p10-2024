@@ -8,6 +8,9 @@ export interface BookObject {
   title: string;
   author: string;
   publishedDate: string;
+  tags: string[];
+  initialQty: number;
+  qty: number;
   publisher: string;
 }
 
@@ -43,6 +46,12 @@ export default {
     <hr class="my-2 border border-black" />
     <h5 class="text-md font-medium text-left">
       Published: {{ book.publishedDate }} by {{ book.publisher }}
+    </h5>
+    <h5 class="text-md font-medium text-left">
+      Category: {{ book.tags.join(", ") }}
+    </h5>
+    <h5 class="text-md font-medium text-left">
+      Quantity: {{ book.qty }} of {{ book.initialQty }} books
     </h5>
     <RouterLink
       :to="getReadMoreLink(book._id)"

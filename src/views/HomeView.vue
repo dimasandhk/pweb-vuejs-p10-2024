@@ -5,7 +5,10 @@ interface BookObject {
   _id: string;
   title: string;
   author: string;
+  tags: string[];
   publishedDate: string;
+  initialQty: number;
+  qty: number;
   publisher: string;
 }
 
