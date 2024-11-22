@@ -23,7 +23,7 @@ export default defineComponent({
   },
   methods: {
     formatDate(date: string): string {
-      return format(new Date(date), "dd MMMM yyyy"); // Use 'dd MMM yyyy' for short month format
+      return format(new Date(date), "dd MMMM yyyy");
     },
     async addBook() {
       const newBook = {
@@ -222,7 +222,7 @@ export default defineComponent({
       <div class="flex justify-center">
         <button
           type="submit"
-          class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-700"
+          class="px-4 text-white py-2 bg-blue-400 font-semibold rounded-xl"
         >
           Add Book
         </button>
