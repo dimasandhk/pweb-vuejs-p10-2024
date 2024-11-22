@@ -27,14 +27,22 @@ export default defineComponent({
   name: "DetailBookView",
   data: () => ({
     bookDetail: {} as BookDetail,
+    fetchError: false,
   }),
   async mounted() {
-    const response = await fetch(
-      `http://localhost:3000/book/${this.$route.params.id}`
-    );
-    const data = await response.json();
-    console.log(data);
-    this.bookDetail = { ...data.data };
+    try {
+      const response = await fetch(
+        `http://localhost:3000/book/${this.$route.params.id}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch book data");
+      }
+      const data = await response.json();
+      this.bookDetail = { ...data.data };
+    } catch (error) {
+      console.error(error);
+      this.fetchError = true;
+    }
   },
   methods: {
     async deleteBook() {
@@ -66,7 +74,10 @@ export default defineComponent({
       class="px-4 text-white py-2 lg:ml-24 bg-blue-400 font-semibold rounded-xl inline-block"
       >⬅️ Back to Home</RouterLink
     >
-    <div v-if="bookDetail.title" class="mt-8">
+    <div v-if="fetchError" class="mt-8">
+      <h1 class="font-bold text-3xl text-center">Failed to load book data</h1>
+    </div>
+    <div v-else-if="bookDetail.title" class="mt-8">
       <div class="flex lg:ml-24 gap-x-10 flex-col lg:flex-row">
         <div class="w-full md:w-4/6 lg:w-[500px] lg:flex-shrink-0">
           <img
@@ -112,7 +123,7 @@ export default defineComponent({
         </button>
       </div>
     </div>
-    <div class="mt-8" v-else>
+    <div v-else class="mt-8">
       <h1 class="font-bold text-3xl text-center">Loading...</h1>
     </div>
   </main>
