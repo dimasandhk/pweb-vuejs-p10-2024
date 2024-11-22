@@ -36,6 +36,19 @@ export default defineComponent({
     console.log(data);
     this.bookDetail = { ...data.data };
   },
+  methods: {
+    async deleteBook() {
+      const response = await fetch(
+        `http://localhost:3000/book/${this.$route.params.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      this.$router.push("/");
+    },
+  },
   computed: {
     starRating(): string {
       const stars = Math.floor(this.bookDetail.rating.average);
@@ -49,45 +62,53 @@ export default defineComponent({
   <main class="mt-14 mx-8 pb-14">
     <RouterLink
       to="/"
-      class="px-4 text-white py-2 md:ml-12 lg:ml-24 bg-blue-400 font-semibold rounded-xl inline-block"
+      class="px-4 text-white py-2 lg:ml-24 bg-blue-400 font-semibold rounded-xl inline-block"
       >⬅️ Back to Home</RouterLink
     >
     <div v-if="bookDetail.title" class="mt-8">
-      <div class="flex md:ml-12 lg:ml-24 gap-x-10 flex-col md:flex-row">
-        <div>
+      <div class="flex lg:ml-24 gap-x-10 flex-col lg:flex-row">
+        <div class="w-full md:w-4/6 lg:w-[500px] lg:flex-shrink-0">
           <img
-            src="https://placehold.co/300x200"
-            class="rounded-xl w-full lg:w-[500px]"
+            :src="bookDetail.coverImage"
+            class="rounded-xl w-full"
             alt="Book Cover"
           />
         </div>
-        <div class="mt-10 md:mt-0">
-          <h1 class="font-bold text-3xl text-left">
+        <div class="mt-10 lg:mt-0 lg:pr-24">
+          <h1 class="font-bold text-xl md:text-2xl lg:text-3xl text-left">
             Buku {{ bookDetail.title }} by {{ bookDetail.author }}
           </h1>
-          <h5 class="text-sm text-gray-500 font-bold">
+          <h5 class="text-sm text-gray-500 font-bold mt-2">
             {{ bookDetail.rating.average }} {{ starRating }} ({{
               bookDetail.rating.count
             }})
           </h5>
           <hr class="border border-black my-2" />
-          <h3 class="text-xl text-left">
+          <h3 class="text-md md:text-lg text-left">
             <span class="font-bold">About:</span> {{ bookDetail.description }}
           </h3>
-          <h3 class="text-xl text-left">
+          <h3 class="text-md md:text-lg text-left">
             <span class="font-bold">Published:</span>
             {{ bookDetail.publishedDate }} by
             {{ bookDetail.publisher }}
           </h3>
-          <h3 class="text-xl text-left">
+          <h3 class="text-md md:text-lg text-left">
             <span class="font-bold">Category:</span>
             {{ bookDetail.tags.join(", ") }}
           </h3>
-          <h3 class="text-xl text-left">
+          <h3 class="text-md md:text-lg text-left">
             <span class="font-bold">Stock:</span>
             {{ bookDetail.qty }} of {{ bookDetail.initialQty }} books
           </h3>
         </div>
+      </div>
+      <div class="lg:ml-24 flex justify-center items-center">
+        <button
+          @click="deleteBook"
+          class="px-4 text-white py-2 w-1/2 bg-red-400 font-semibold rounded-xl mt-8 inline-block"
+        >
+          Remove Book
+        </button>
       </div>
     </div>
     <div class="mt-8" v-else>
