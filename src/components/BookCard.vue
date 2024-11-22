@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     getReadMoreLink(id: string) {
-      return `/books/${id}`;
+      return `/detail/${id}`;
     },
   },
 };
