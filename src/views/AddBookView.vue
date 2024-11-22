@@ -17,6 +17,8 @@ export default defineComponent({
       tags: "",
       initialQty: 0,
       qty: 0,
+      error: false,
+      errorMsg: "",
     };
   },
   methods: {
@@ -40,7 +42,6 @@ export default defineComponent({
         qty: this.qty,
       };
 
-      console.log(JSON.stringify(newBook));
       const response = await fetch("http://localhost:3000/book", {
         method: "POST",
         headers: {
@@ -51,10 +52,16 @@ export default defineComponent({
 
       if (response.ok) {
         alert("Book added successfully!");
+        this.error = false;
+        this.$router.push("/");
       } else {
-        alert("Failed to add book.");
+        this.error = true;
         const data = await response.json();
-        console.log(data);
+        if (data.message.includes("duplicate")) {
+          this.errorMsg = "Book already exists!";
+        } else {
+          this.errorMsg = data.message;
+        }
       }
     },
   },
@@ -63,7 +70,7 @@ export default defineComponent({
 
 <template>
   <main class="mt-10 mx-8 pb-24">
-    <h1 class="font-bold text-3xl text-center mb-8">Add New Book</h1>
+    <h1 class="font-bold text-3xl text-center mb-2">Add New Book</h1>
     <form
       @submit.prevent="addBook"
       class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md"
@@ -76,6 +83,7 @@ export default defineComponent({
           v-model="title"
           id="title"
           type="text"
+          placeholder="Tintin di Tibet"
           class="w-full px-3 py-2 border rounded-lg"
           required
         />
@@ -88,6 +96,7 @@ export default defineComponent({
           v-model="author"
           id="author"
           type="text"
+          placeholder="Hergé"
           class="w-full px-3 py-2 border rounded-lg"
           required
         />
@@ -112,6 +121,7 @@ export default defineComponent({
           v-model="publisher"
           id="publisher"
           type="text"
+          placeholder="Gramedia"
           class="w-full px-3 py-2 border rounded-lg"
           required
         />
@@ -123,6 +133,7 @@ export default defineComponent({
         <textarea
           v-model="description"
           id="description"
+          placeholder="Kisah petualangan Tintin di Tibet"
           class="w-full px-3 py-2 border rounded-lg"
           required
         ></textarea>
@@ -135,6 +146,7 @@ export default defineComponent({
           v-model="coverImage"
           id="coverImage"
           type="url"
+          placeholder="https://placehold.co/300x200"
           class="w-full px-3 py-2 border rounded-lg"
           required
         />
@@ -172,6 +184,7 @@ export default defineComponent({
           v-model="tags"
           id="tags"
           type="text"
+          placeholder="Adventure, Fiction, Mystery"
           class="w-full px-3 py-2 border rounded-lg"
           required
         />
@@ -200,6 +213,12 @@ export default defineComponent({
           required
         />
       </div>
+      <h5
+        class="font-bold text-xl text-red-400 mb-8 text-center"
+        v-show="error"
+      >
+        {{ errorMsg }}
+      </h5>
       <div class="flex justify-center">
         <button
           type="submit"
@@ -211,7 +230,3 @@ export default defineComponent({
     </form>
   </main>
 </template>
-
-<style scoped>
-/* Add any additional styles if needed */
-</style>
