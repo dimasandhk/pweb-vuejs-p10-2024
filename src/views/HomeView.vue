@@ -35,6 +35,7 @@ export default {
         :key="book._id"
         :book="book"
       />
+      <h1 class="font-bold text-3xl text-center" v-else>Loading...</h1>
     </div>
   </main>
 </template>

@@ -90,5 +90,8 @@ export default defineComponent({
         </div>
       </div>
     </div>
+    <div class="mt-8" v-else>
+      <h1 class="font-bold text-3xl text-center">Loading...</h1>
+    </div>
   </main>
 </template>
