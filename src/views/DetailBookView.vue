@@ -46,6 +46,7 @@ export default defineComponent({
       );
       const data = await response.json();
       console.log(data);
+      alert("Book has been removed!");
       this.$router.push("/");
     },
   },
